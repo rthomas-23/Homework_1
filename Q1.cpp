@@ -35,7 +35,7 @@ void Question1(double L_p, double L_delta)
 		ti = dt * (i + 1); // t = t
 		pi = pi + (p_doti * dt); // t = t
 		p_doti = L_p * pi + L_delta * delta; // t = t
-		cout << "Time = " << ti << " sec, p = " << pi << endl;
+		std::cout << "Time = " << ti << " sec, p =" << pi << " rad/sec, p_dot =" << p_doti << " rad/sec/sec" << std::endl;
 		//cout << "delta = " << delta << endl;
 	}
 	return;
