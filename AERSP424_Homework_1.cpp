@@ -1,6 +1,4 @@
 ﻿// AERSP424_Homework_1.cpp : Defines the entry point for the application.
-//
-
 #include "AERSP424_Homework_1.h"
 #include "Q1.h"
 #include "Q2.h"
@@ -9,26 +7,29 @@
 #include "Q5.h"
 #include "Q6.h"
 #include "Q7.h"
-
+#include "Q8.h"
+#include "Q9.h"
 #include <vector>
+#include <map>
+#include <string>
 using namespace std;
 
 int main()
 {
 	////--- Question 1 ---////
-	double L_p = 0.3;
-	double L_delta = -0.1;
+	double L_p = 0.3; //roll damping coefficient
+	double L_delta = -0.1; // aileron effectiveness
 	cout << "Question 1.... " << endl;
 	Question1(L_p, L_delta);
 
 	////--- Question 2 ---////
-	double K = 2;
+	double K = 2; // feedback control gain
 	cout << "\nQuestion 2.... " << endl;
 	Question2(L_p, L_delta, K);
-#
+
 	////--- Question 3 ---////
-	double alpha = 0.2;
-	double k0 = 0.5;
+	double alpha = 0.2; // adaptive rate
+	double k0 = 0.5; // initial control gain
 	cout << "\nQuestion 3.... " << endl;
 	Question3(L_p, L_delta, k0, alpha);
 
@@ -79,6 +80,36 @@ int main()
 		std::cout << i << ' ';
 
 	////--- Question 8 ---////
+	cout << "\n\nQuestion 8.... " << endl;
+	// this is the reference data of 8 aircraft to tune the neural network
+	double ref_data[8][4] =
+	{
+		{124, 31.89,20.945,1},
+		{74,51.08,9.17,0},
+		{103,34.67,8.3,1},
+		{77,52,9.4,0},
+		{104,35.63,13,1},
+		{92,56,12.5,0},
+		{130,31.29,17.637,1},
+		{73,52,9.6,0}
+	};
+	int n = 99; // number of iterations to train the network
+	vector<double> w_trained = train_network(w, alpha_update, ref_data, n);
+	cout << "\nw_trained = ";
+	for (double i : w_trained)
+		std::cout << i << ' ';
+
+	////--- Question 9 ---////
+	cout << "\n\nQuestion 9.... " << endl;
+	// this is data for 4 new aircraft. for their engine type to be identified by the neural network
+	map<string, vector<double>> new_data =
+	{
+		{"SF50 Vision", {87,38.67,6}},
+		{"208 Caravan", {79,52.08,8}},
+		{"Aero L-29 Delfin", {92,33.75,7.804}},
+		{"AT-802U", {91,59.25,16}}
+	};
+	map<string, vector<double>> a = guess_engine(new_data, w_trained);
 
 	return 0;
 }
